@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
 
-    cout << "Welcome to 862288730, XXX, and XXX 8 puzzle solver." << endl;
+    cout << "Welcome to 862288730, 862277791, and XXX 8 puzzle solver." << endl;
 
     cout << "Type \"1\" to use a default puzzle, or \"2\" to enter your own puzzle." << endl;
     int puzzleType;
@@ -48,11 +48,12 @@ int main() {
         
         string row;
         stringstream ss;
+        int value;
 
         cin.ignore();
         getline(cin, row);
         ss << row;
-        int value;
+
         
         vector<int> row1;
         for (int i = 0; i < 3; i++) {
@@ -61,7 +62,12 @@ int main() {
         }
         initial.push_back(row1);
 
+        cout << "Enter the second row, use space or tabs between numbers" << endl;
+
         ss.clear();
+        cin.ignore();
+        getline(cin, row);
+        ss << row;
         vector<int> row2;
         for (int i = 0; i < 3; i++) {
             ss >> value;
@@ -69,7 +75,13 @@ int main() {
         }
         initial.push_back(row2);
 
+        cout << "Enter the third row, use space or tabs between numbers" << endl;
+
         ss.clear();
+        cin.ignore();
+        getline(cin, row);
+        ss << row;
+        
         vector<int> row3;
         for (int i = 0; i < 3; i++) {
             ss >> value;
