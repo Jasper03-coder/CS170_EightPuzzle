@@ -31,11 +31,12 @@ class Node{
         }
 
         void printNode() {
+
             for(int row = 0; row < puzzle.size(); row++){ 
-                for(int column = 0; column < puzzle.size(); column++){
+                for(int column = 0; column < puzzle.at(row).size(); column++){
                     cout << puzzle.at(row).at(column);
 
-                    if (column != puzzle.at(row).at(puzzle.size())) {
+                    if (column != puzzle.at(row).size() - 1) {
                     cout << " ";
                     }
                 }
@@ -49,6 +50,13 @@ class Node{
             this->puzzle.at(curr_row).at(curr_col) = temp; // store the temp value in the curr position
         }
         
+        int getRow() {
+            return blank_row;
+        }
+
+        int getCol() {
+            return blank_col;
+        }
     };
 
 
