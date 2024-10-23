@@ -49,14 +49,43 @@ class Node{
             this->puzzle.at(new_row).at(new_col) = 0; // store the blank in the new position
             this->puzzle.at(curr_row).at(curr_col) = temp; // store the temp value in the curr position
         }
+
+        vector< vector<int> > getPuzzle() {
+            return puzzle;
+        }
         
+        Node* getParent() {
+            return parent;
+        }
+
         int getRow() {
             return blank_row;
         }
-
+        
         int getCol() {
             return blank_col;
         }
+
+        void incrementRow() { 
+            blank_row += 1;
+        }
+
+        void decrementRow() { 
+            blank_row -= 1;
+        }
+
+        void incrementCol() {
+            blank_col += 1;
+        }
+
+        void decrementCol() {
+            blank_col -= 1;
+        }
+
+        int getCost() {
+            return cost;
+        }
+
     };
 
 

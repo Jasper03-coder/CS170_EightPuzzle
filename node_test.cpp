@@ -26,7 +26,6 @@ int main() {
     cout << "The blank is in Row " << newState->getRow() << " Column " << newState->getCol() << endl << endl;
 
     
-    
 
 
     return 0;

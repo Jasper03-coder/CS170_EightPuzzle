@@ -1,0 +1,41 @@
+ 
+ 
+ // Operators
+        
+    - must have access to the blanks current row and current col
+    - we must somehow create a new node with the updated matrix following the specific operator
+    - we can use swapTiles function in the Node structure, but should it be void or return a new node
+    - should we return anything (void, Node*, bool, vector<vector<int>>)
+        - if we move the blank we will have a new puzzle so we either return a vector<vector<int>> or return a new node
+        - if we return a vector we would have to create a new node but the new node needs its parent so we must return a new Node*
+            from the operator function
+    - must update the row or column after specific operator so we know where the blank is now
+
+        
+        1. Type of function
+            - if void, then how do we gain access to the current node outside this helper function. We can't so this is not an option
+            - in the operator function, we would have to create a new node if the operator is a valid move
+            - if Node*, we solve the issue of having access to the new Node after a valid operator move
+
+        
+        2. Need to check if the operator is a valid move at the blanks current position
+            - need the blank's row, or
+            - need the blank's column
+            - if it is not valid we can return nullptr
+            - if it is we can continue to create a new node
+        
+        3. The operator is a valid move:
+
+            - we need to create a new node with the updated puzzle after the specific operator move
+            - how should we go about this using the swapTiles function in Node
+
+                - if swapTiles() returns a vector, then in the function itself, it should make 
+                    a copy of the currNodes puzzle, then swap the tiles in that vector, then return the copy. 
+                    then we can pass it through as the first argument in initializing the new Node
+
+                - if it is void, then in the operator function, we should make a new node with the same puzzle as the 
+                    current node and after creating the new node, then we can swap the tiles in the new node
+
+            - since the move is valid and the blank tile moves. We need to update the row/column according to whichever operator move was made
+
+            
