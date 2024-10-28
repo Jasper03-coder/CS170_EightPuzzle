@@ -23,7 +23,7 @@ class Node{
         Node(vector<vector<int> > puzzle, Node* parent, int cost) {
             this->puzzle = puzzle;
             this->parent = parent;
-            this->cost = cost;
+            this->g = cost;
             
             // find the row and column of where the blank tile is at
             for (int i = 0; i < puzzle.size(); i++) {
@@ -54,6 +54,42 @@ class Node{
             int temp = this->puzzle.at(new_row).at(new_col); // save the value stored in the new position
             this->puzzle.at(new_row).at(new_col) = 0; // store the blank in the new position
             this->puzzle.at(curr_row).at(curr_col) = temp; // store the temp value in the curr position
+        }
+
+        vector< vector<int> > getPuzzle() {
+            return puzzle;
+        }
+        
+        Node* getParent() {
+            return parent;
+        }
+
+        int getRow() {
+            return blank_row;
+        }
+        
+        int getCol() {
+            return blank_col;
+        }
+
+        void incrementRow() { 
+            blank_row += 1;
+        }
+
+        void decrementRow() { 
+            blank_row -= 1;
+        }
+
+        void incrementCol() {
+            blank_col += 1;
+        }
+
+        void decrementCol() {
+            blank_col -= 1;
+        }
+
+        int getCost() {
+            return g;
         }
         
     };
