@@ -9,11 +9,17 @@ class Node{
     private: 
         vector<vector<int> > puzzle;
         Node* parent;
-        int cost;
+        int g;
+        int h;
         int blank_row;
         int blank_col;
 
     public: 
+ /*
+        Node(vector<vector<int>> puzzle, Node* parent, int cost);
+        void printNode();
+        void swapTiles(int curr_row, int curr_col, int new_row, int new_col);
+*/
         Node(vector<vector<int> > puzzle, Node* parent, int cost) {
             this->puzzle = puzzle;
             this->parent = parent;
@@ -30,13 +36,13 @@ class Node{
             }
         }
 
+// It should be checking if (column != puzzle.size() - 1) to prevent printing a space after the last element in the row.
         void printNode() {
-
             for(int row = 0; row < puzzle.size(); row++){ 
-                for(int column = 0; column < puzzle.at(row).size(); column++){
+                for(int column = 0; column < puzzle.size(); column++){
                     cout << puzzle.at(row).at(column);
-
-                    if (column != puzzle.at(row).size() - 1) {
+// column != puzzle.at(row).at(puzzle.size()
+                    if (column != puzzle.size() - 1) { 
                     cout << " ";
                     }
                 }
@@ -49,43 +55,7 @@ class Node{
             this->puzzle.at(new_row).at(new_col) = 0; // store the blank in the new position
             this->puzzle.at(curr_row).at(curr_col) = temp; // store the temp value in the curr position
         }
-
-        vector< vector<int> > getPuzzle() {
-            return puzzle;
-        }
         
-        Node* getParent() {
-            return parent;
-        }
-
-        int getRow() {
-            return blank_row;
-        }
-        
-        int getCol() {
-            return blank_col;
-        }
-
-        void incrementRow() { 
-            blank_row += 1;
-        }
-
-        void decrementRow() { 
-            blank_row -= 1;
-        }
-
-        void incrementCol() {
-            blank_col += 1;
-        }
-
-        void decrementCol() {
-            blank_col -= 1;
-        }
-
-        int getCost() {
-            return cost;
-        }
-
     };
 
 
