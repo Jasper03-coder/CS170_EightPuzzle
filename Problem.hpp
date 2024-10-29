@@ -158,7 +158,6 @@ class Problem {
 
             while (!frontier.empty()) { // Check if the frontier is not empty
                 
-                
                 if (frontier.size() > maxQueueSize) { // check if the size of the frontier is bigger than the maxQueue size
                     maxQueueSize = frontier.size(); // Update if it is
                 }
@@ -169,6 +168,7 @@ class Problem {
                 if (current == initialState) {
                     cout << "Expanding state" << endl;
                     current->printNode();
+                    nodesExpanded++;
                     cout << endl << endl;
                 }
                 else {
@@ -183,7 +183,7 @@ class Problem {
                 
                 if (isGoalState(current)) { // if it is the goal state, return the corresponding solution
                     printSolution(current); 
-                    depth = current->getCost();
+                    depth = current->getCost(); //depth of the goalNode is the same as the cost
                     return 0;
                 }
 
