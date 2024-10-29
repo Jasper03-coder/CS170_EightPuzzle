@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 
 class Node{
@@ -15,15 +16,11 @@ class Node{
         int blank_col;
 
     public: 
- /*
-        Node(vector<vector<int>> puzzle, Node* parent, int cost);
-        void printNode();
-        void swapTiles(int curr_row, int curr_col, int new_row, int new_col);
-*/
         Node(vector<vector<int> > puzzle, Node* parent, int cost) {
             this->puzzle = puzzle;
             this->parent = parent;
             this->g = cost;
+            this->h = -1;
             
             // find the row and column of where the blank tile is at
             for (int i = 0; i < puzzle.size(); i++) {
@@ -41,12 +38,15 @@ class Node{
             for(int row = 0; row < puzzle.size(); row++){ 
                 for(int column = 0; column < puzzle.size(); column++){
                     cout << puzzle.at(row).at(column);
-// column != puzzle.at(row).at(puzzle.size()
+
                     if (column != puzzle.size() - 1) { 
                     cout << " ";
                     }
                 }
-                cout << "\n";
+                if (row != 2) {
+                    cout << "\n";
+                }
+                
             }
         } 
 
@@ -54,6 +54,7 @@ class Node{
             int temp = this->puzzle.at(new_row).at(new_col); // save the value stored in the new position
             this->puzzle.at(new_row).at(new_col) = 0; // store the blank in the new position
             this->puzzle.at(curr_row).at(curr_col) = temp; // store the temp value in the curr position
+            
         }
 
         vector< vector<int> > getPuzzle() {
@@ -91,6 +92,24 @@ class Node{
         int getCost() {
             return g;
         }
+
+        int getH() {
+            return this->h;
+        }
+
+        int countMisplacedTiles(Node* current, Node* goalState) {
+            int count = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) { 
+                    if (current->getPuzzle().at(i).at(j) != goalState->getPuzzle().at(i).at(j)) {
+                        count++; 
+                    }
+                }
+            }
+
+            this->h = count;
+            return count;
+        }  
         
     };
 
