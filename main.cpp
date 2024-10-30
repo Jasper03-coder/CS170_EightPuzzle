@@ -1,8 +1,13 @@
 #include <iostream>
 #include<sstream>
 #include <vector>
+
+#include "Node.hpp"
 #include "Problem.hpp"
 #include "UniformCostSearch.hpp"
+#include "MisplacedTilesSearch.hpp"
+#include "EuclideanDistanceSearch.hpp"
+
 
 using namespace std;
 
@@ -19,28 +24,15 @@ int main() {
         cout << "Type \"1\" to use a default puzzle, or \"2\" to enter your own puzzle." << endl;
         cin >> puzzleType;
     }
-    
-    vector< vector<int> > initial; 
+
+    vector< vector<int> > default_initial; 
+    vector< vector<int> > custom_initial;
+
+    bool defaultPuzzle = true;
 
     if (puzzleType == 1) { // Default puzzle ---------------
         
-        vector<int> row;
-        row.push_back(1);
-        row.push_back(2);
-        row.push_back(3);
-        initial.push_back(row);
-
-        row.clear();
-        row.push_back(4);
-        row.push_back(8);
-        row.push_back(5);
-        initial.push_back(row);
-
-        row.clear();
-        row.push_back(7);
-        row.push_back(0);
-        row.push_back(6);
-        initial.push_back(row);
+        default_initial = {{1,0,3}, {4,2,6}, {7,5,8}};
 
     }
     else if (puzzleType == 2) { // Custom puzzle ----------------
@@ -62,12 +54,11 @@ int main() {
             ss >> value;
             row1.push_back(value);
         }
-        initial.push_back(row1);
+        custom_initial.push_back(row1);
 
         cout << "Enter the second row, use space or tabs between numbers" << endl;
 
         ss.clear();
-        cin.ignore();
         getline(cin, row);
         ss << row;
         vector<int> row2;
@@ -75,12 +66,11 @@ int main() {
             ss >> value;
             row2.push_back(value);
         }
-        initial.push_back(row2);
+        custom_initial.push_back(row2);
 
         cout << "Enter the third row, use space or tabs between numbers" << endl;
 
         ss.clear();
-        cin.ignore();
         getline(cin, row);
         ss << row;
         
@@ -89,23 +79,24 @@ int main() {
             ss >> value;
             row3.push_back(value);
         }
-        initial.push_back(row3);
+        custom_initial.push_back(row3);
 
+        defaultPuzzle = false;
     }
 
-    vector<vector<int>> goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+    Node* initialState = nullptr;
+    if (defaultPuzzle) {
+        initialState = new Node(default_initial, nullptr, 0);
+    }
+    else {
+        initialState = new Node(custom_initial, nullptr, 0);
+    }
+  
+    vector< vector<int> > goal = {{1,2,3},{4,5,6},{7,8,0}};
+    Node* goalState = new Node(goal, nullptr, 0);
+  
+    Problem* problem = new Problem(initialState, goalState);
 
-    Node* initialNode = new Node(initial, nullptr, 0); // Initial state node
-    Node* goalNode = new Node(goal, nullptr, 0);       // Goal state node
-
-        Problem problem(initialNode, goalNode);
-
-
-    /*
-    
-        Add code if necessary 
-    
-    */
 
     cout << "\nEnter your choice of algorithm" << endl;
     cout << "1 for Uniform Cost Search" << endl;
@@ -125,35 +116,22 @@ int main() {
         cin >> algorithm;
     }
 
-    /*
-    
-        Add code if necessary
-    
-    */
-
-    int maxQueue;
-    int nodesExpanded;
-    int nodeDepth;
-
     // run the algorithms here
-
+    
     if (algorithm == 1) { // Uniform Cost Search
         uniformCostSearch(problem);
     }
     else if (algorithm == 2) { // Misplaced Tile 
-
+        //misplacedTilesSearch(problem);
     }
     else if (algorithm == 3) { // Euclidean Distance
-         
+        //euclideanDistanceSearch(problem);
     }
-
-    
-    // cout << "To solve this problem the search algorithm expanded a total of " << nodesExpanded << " nodes." << endl;
-    // cout << "The maximum number of nodes in the queue at any one time: " << maxQueue << endl;
-    // cout << "The depth of the goal was " << nodeDepth << endl;
+  
+  delete initialState;
+  delete goalState;
+  delete problem;
    
-    delete initialNode;
-    delete goalNode;
 
     return 0;
 }
