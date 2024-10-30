@@ -13,13 +13,13 @@ struct CompareCost {
     }
 };
 
-void uniformCostSearch(const Problem& problem) {
+void uniformCostSearch(Problem* problem) {
     // Priority queue to select the node with the lowest cumulative cost
     std::priority_queue<Node*, std::vector<Node*>, CompareCost> pq;
     std::set<std::vector<std::vector<int>>> visited;
 
     // Start with the initial state of the problem
-    Node* startNode = problem.getInitialState();
+    Node* startNode = problem->getInitialState();
     pq.push(new Node(startNode->getPuzzle(), nullptr, 0)); // Initialize with cost 0
 
     int nodesExpanded = 0;
@@ -34,9 +34,9 @@ void uniformCostSearch(const Problem& problem) {
         pq.pop();
 
         // Goal check
-        if (problem.isGoalState(current)) {
+        if (problem->isGoalState(current)) {
             std::cout << "Goal reached with path cost: " << current->getCost() << std::endl;
-            problem.printSolution(current);
+            problem->printSolution(current);
             std::cout << "Nodes expanded: " << nodesExpanded << std::endl;
             std::cout << "Maximum queue size: " << maxQueueSize << std::endl;
             std::cout << "Depth of goal node: " << current->getCost() << std::endl;
@@ -53,7 +53,7 @@ void uniformCostSearch(const Problem& problem) {
         nodesExpanded++;
 
         // Expand the current node and add all valid children to the priority queue
-        std::vector<Node*> children = problem.expand(current);
+        std::vector<Node*> children = problem->expand(current);
         for (Node* child : children) {
             if (visited.find(child->getPuzzle()) == visited.end()) {
                 pq.push(new Node(child->getPuzzle(), current, current->getCost() + 1));

@@ -15,11 +15,11 @@ class Node{
         int blank_col;
 
     public: 
-
         Node(vector<vector<int> > puzzle, Node* parent, int cost) {
             this->puzzle = puzzle;
             this->parent = parent;
             this->g = cost;
+            this->h = 0;
             
             // find the row and column of where the blank tile is at
             for (int i = 0; i < puzzle.size(); i++) {
@@ -91,7 +91,7 @@ class Node{
         int getCost() {
             return g;
         }
-  
+
         int getH() {
             return this->h;
         }
@@ -100,7 +100,7 @@ class Node{
             int count = 0;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) { 
-                    if (puzzle.at(i).at(j) != goalState->getPuzzle().at(i).at(j) && puzzle.at(i).at(j) != 0) {
+                    if (puzzle.at(i).at(j) != goalState->getPuzzle().at(i).at(j)) {
                         count++; 
                     }
                 }
@@ -109,7 +109,6 @@ class Node{
             this->h = count;
             return count;
         }  
-        
     };
 
 
@@ -126,4 +125,3 @@ class Node{
     
 
 #endif
-

@@ -6,7 +6,7 @@
 #include "Problem.hpp"
 #include "UniformCostSearch.hpp"
 #include "MisplacedTilesSearch.hpp"
-#include "EuclideanDistanceSearch.hpp"
+// #include "EuclideanDistanceSearch.hpp"
 
 
 using namespace std;
@@ -122,7 +122,7 @@ int main() {
         uniformCostSearch(problem);
     }
     else if (algorithm == 2) { // Misplaced Tile 
-        //misplacedTilesSearch(problem);
+        misplacedTilesSearch(problem);
     }
     else if (algorithm == 3) { // Euclidean Distance
         //euclideanDistanceSearch(problem);

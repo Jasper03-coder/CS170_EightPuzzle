@@ -5,6 +5,6 @@
 #include "Node.hpp"
 #include <vector>
 
-void uniformCostSearch(const Problem& problem);
+void uniformCostSearch(Problem* problem);
 
 #endif // UNIFORM_COST_SEARCH_HPP
