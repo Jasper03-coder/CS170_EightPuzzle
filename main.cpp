@@ -4,6 +4,10 @@
 
 #include "Node.hpp"
 #include "Problem.hpp"
+#include "UniformCostSearch.hpp"
+#include "MisplacedTilesSearch.hpp"
+#include "EuclideanDistanceSearch.hpp"
+
 
 using namespace std;
 
@@ -21,8 +25,6 @@ int main() {
         cin >> puzzleType;
     }
 
-    vector< vector<int> > goal = {{1,2,3},{4,5,6},{7,8,0}};
-    Node* goalState = new Node(goal, nullptr, 0);
     vector< vector<int> > default_initial; 
     vector< vector<int> > custom_initial;
 
@@ -30,7 +32,7 @@ int main() {
 
     if (puzzleType == 1) { // Default puzzle ---------------
         
-        default_initial = {{1,2,3}, {4,0,5}, {7,8,6}};
+        default_initial = {{1,0,3}, {4,2,6}, {7,5,8}};
 
     }
     else if (puzzleType == 2) { // Custom puzzle ----------------
@@ -89,6 +91,11 @@ int main() {
     else {
         initialState = new Node(custom_initial, nullptr, 0);
     }
+  
+    vector< vector<int> > goal = {{1,2,3},{4,5,6},{7,8,0}};
+    Node* goalState = new Node(goal, nullptr, 0);
+  
+    Problem* problem = new Problem(initialState, goalState);
 
 
     cout << "\nEnter your choice of algorithm" << endl;
@@ -109,32 +116,21 @@ int main() {
         cin >> algorithm;
     }
 
-    /*
-    
-        Add code if necessary
-    
-    */
-
-    Problem* puzzle = new Problem(initialState, goalState);
-
     // run the algorithms here
     
     if (algorithm == 1) { // Uniform Cost Search
-
+        uniformCostSearch(problem);
     }
     else if (algorithm == 2) { // Misplaced Tile 
-
-        puzzle->MisplacedTilesSearch();
-
+        //misplacedTilesSearch(problem);
     }
     else if (algorithm == 3) { // Euclidean Distance
-         
+        //euclideanDistanceSearch(problem);
     }
-
-    
-     cout << "To solve this problem the search algorithm expanded a total of " << puzzle->getNodesExpanded() << " nodes." << endl;
-     cout << "The maximum number of nodes in the queue at any one time: " << puzzle->getMaxQueue() << endl;
-     cout << "The depth of the goal was " << puzzle->getDepth() << endl;
+  
+  delete initialState;
+  delete goalState;
+  delete problem;
    
 
     return 0;

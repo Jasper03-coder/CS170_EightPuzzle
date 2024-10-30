@@ -1,4 +1,4 @@
- 
+
  
  // Operators
         
@@ -59,4 +59,4 @@
 
     - use the operators to expand the current state
     - if the move is valid, create a new node and only add it to the frontier if you have not explored it yet
-   
+ 

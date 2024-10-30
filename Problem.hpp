@@ -12,9 +12,6 @@ class Problem {
     private:
         Node* initialState;
         Node* goalState;
-        int maxQueueSize = 0;
-        int nodesExpanded = 0;
-        int depth = 0;
 
     public:
 
@@ -26,60 +23,45 @@ class Problem {
        // Operators:
 
         Node* Up(Node* currNode) {
-            if (currNode->getRow() == 0) {
-                return nullptr;
+            if (currNode->getRow() > 0) { // Check that moving up is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() - 1, currNode->getCol());
+                newNode->decrementRow(); // Adjust as per swap direction
+                return newNode;
             }
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving up means blank_row decrements by 1 and blank_col remains the same
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() - 1, currNode->getCol());
-            newNode->decrementRow();
-
-            return newNode;
+            return nullptr;
         }
 
         Node* Down(Node* currNode) {
-            if (currNode->getRow() == 2) {
-                return nullptr;
+            if (currNode->getRow() < 2) { // Check that moving down is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() + 1, currNode->getCol());
+                newNode->incrementRow(); // Adjust as per swap direction
+                return newNode;
             }
-
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving down means blank_row increments by 1 and blank_col remains the same
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() + 1, currNode->getCol());
-            newNode->incrementRow();
-
-            return newNode;
+            return nullptr;
 
         }
 
-        Node* Left(Node* currNode) {
-            if (currNode->getCol() == 0) {
-                return nullptr;
+        Node* moveLeft(Node* currNode) {
+            if (currNode->getCol() > 0) { // Check that moving left is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() - 1);
+                newNode->decrementCol();
+                return newNode;
             }
-
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving left means blank_row remains and blank_col decrements by 1
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() - 1);
-            newNode->decrementCol();
-
-            return newNode;
+            return nullptr;
 
         }
 
-        Node* Right(Node* currNode) {
-            if (currNode->getCol() == 2) {
-                return nullptr;
+        Node* moveRight(Node* currNode) {
+            if (currNode->getCol() < 2) { // Check that moving right is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() + 1);
+                newNode->incrementCol();
+                return newNode;
             }
-
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving left means blank_row remains and blank_col increments by 1
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() + 1);
-            newNode->incrementCol();
-
-            return newNode;
+            return nullptr;
 
         }
 
@@ -124,124 +106,135 @@ class Problem {
             
         }
 
-         int getMaxQueue() {
-            return this->maxQueueSize;
+        vector<Node*> expand(Node* currNode) {
+            vector<Node*> children;
+
+            if (Node* up = Up(currNode)) children.push_back(up);
+            if (Node* down = Down(currNode)) children.push_back(down);
+            if (Node* left = moveLeft(currNode)) children.push_back(left);
+            if (Node* right = moveRight(currNode)) children.push_back(right);
+
+            return children; // Return all possible moves
         }
 
-        int getNodesExpanded() {
-            return this->nodesExpanded;
+        Node* getInitialState() {
+            return this->initialState;
         }
 
-        int getDepth() {
-            return this->depth;
+        Node* getGoalState() {
+            return this->goalState;
+        }
+  
+        /* put into another file for
+        
+        
+struct MTCompareCosts {
+    bool operator() (Node* node1, Node* node2) {
+        
+        vector< vector<int> > goal = {{1,2,3}, {4,5,6}, {7,8,0}};
+        Node* goalState = new Node(goal, nullptr, 0);
+
+        return (node1->getCost() + node1->countMisplacedTiles(goalState)) > (node2->getCost() + node2->countMisplacedTiles(goalState));
+    }
+    
+};
+
+// Search algorithm to solve the 8 puzzle by A* Misplaced Tiles Search
+
+void misplacedTilesSearch(Problem* problem) {
+    priority_queue<Node*, vector<Node*>, MTCompareCosts > frontier; // priority queue to select the node with the lowest cost
+    vector<Node*> explored;     // keep track of nodes we already explored
+    frontier.push(problem->getInitialState());        // initialize the frontier using the initialState
+
+    // Create and initialize variables since we removed it from the problems private variables
+    int nodesExpanded = 0;
+    int maxQueueSize = 0;
+
+    while (!frontier.empty()) { // Check if the frontier is not empty
+        
+        if (frontier.size() > maxQueueSize) { // check if the size of the frontier is bigger than the maxQueue size
+            maxQueueSize = frontier.size(); // Update if it is
         }
 
-        // Misplaced Tiles 
+        Node* current = frontier.top(); // Get a leaf node from the frontier
+        frontier.pop(); // Remove the leaf node from the frontier
 
-        struct MTCompareCosts {
-            bool operator() (Node* node1, Node* node2) {
+        if (current == problem->getInitialState()) {
+            // cout << "Expanding state" << endl;
+            // current->printNode();
+            nodesExpanded++;
+            // cout << endl << endl;
+        }
+        else {
+            // cout << endl;
+            // current->printNode();
+            // cout << "   Expanding this node..." << endl;
+            // cout << endl;
+            nodesExpanded++;
+        }
+
+        // Check if the current state is the goal state
+        
+        if (problem->isGoalState(current)) { // if it is the goal state, return the corresponding solution
+            problem->printSolution(current); 
+            cout << "Nodes expanded: " << nodesExpanded << endl;
+            cout << "Maximum queue size: " << maxQueueSize << endl;
+            cout << "Depth of goal node: " << current->getCost() << endl;
+            return;
+        }
+
+        if (!problem->isExplored(current, explored)) { // check if the current state has been explored
+            explored.push_back(current); // add it to the explored set
+
+            // Use the operators to expand the current state
+
+            Node* newState = problem->Up(current); 
+            if (newState != nullptr) { // if Up is a valid move
+
+                if (!problem->isExplored(newState, explored) ) { // if the state has not been explored
+                    frontier.push(newState); // add it to the frontier
+                }
                 
-                vector< vector<int> > goal = {{1,2,3}, {4,5,6}, {7,8,0}};
-                Node* goalState = new Node(goal, nullptr, 0);
-
-                return (node1->getCost() + node1->countMisplacedTiles(goalState) > node2->getCost() + node2->countMisplacedTiles(goalState));
+    
             }
-            
-        };
 
-        // Misplaced Tiles Heuristic Search
+            newState = problem->Down(current);
+            if (newState != nullptr) { // if down is a valid move
 
-        int MisplacedTilesSearch() {
-            priority_queue<Node*, vector<Node*>, MTCompareCosts > frontier;
-            vector<Node*> explored;     // keep track of nodes we already explored
-            frontier.push(initialState);        // initialize the frontier using the initialState
-
-            while (!frontier.empty()) { // Check if the frontier is not empty
+                if (!problem->isExplored(newState, explored)) { // check if the state has not been explored
+                    frontier.push(newState); // add it to the frontier
+                }
                 
-                if (frontier.size() > maxQueueSize) { // check if the size of the frontier is bigger than the maxQueue size
-                    maxQueueSize = frontier.size(); // Update if it is
-                }
-
-                Node* current = frontier.top(); // Get a leaf node from the frontier
-                frontier.pop(); // Remove the leaf node from the frontier
-
-                if (current == initialState) {
-                    cout << "Expanding state" << endl;
-                    current->printNode();
-                    nodesExpanded++;
-                    cout << endl << endl;
-                }
-                else {
-                    cout << endl;
-                    current->printNode();
-                    cout << "   Expanding this node..." << endl;
-                    cout << endl;
-                    nodesExpanded++;
-                }
-
-                // Check if the current state is the goal state
-                
-                if (isGoalState(current)) { // if it is the goal state, return the corresponding solution
-                    printSolution(current); 
-                    depth = current->getCost(); //depth of the goalNode is the same as the cost
-                    return 0;
-                }
-
-                if (!isExplored(current, explored)) { // check if the current state has been explored
-                    explored.push_back(current); // add it to the explored set
-
-                    // Use the operators to expand the current state
-
-                    Node* newState = Up(current); 
-                    if (newState != nullptr) { // if Up is a valid move
-
-                        if (!(isExplored(newState, explored)) ) { // if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
-                        
-            
-                    }
-
-                    newState = Down(current);
-                    if (newState != nullptr) { // if down is a valid move
-
-                        if (!isExplored(newState, explored)) { // check if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
-                        
-                    }
-
-                    newState = Left(current);
-                    if (newState != nullptr) { // if Left is a valid move
-
-                        if (!isExplored(newState, explored)) { // check if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
-            
-                    }
-
-                    newState = Right(current); 
-                    if (newState != nullptr) { // if right is a valid move
-
-                        if (!isExplored(newState, explored)) { // check if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
-            
-                    }
-
-                    
-                }
-
-
-
-                
-
-
-                
-
             }
-            return -1;
+
+            newState = problem->moveLeft(current);
+            if (newState != nullptr) { // if Left is a valid move
+
+                if (!problem->isExplored(newState, explored)) { // check if the state has not been explored
+                    frontier.push(newState); // add it to the frontier
+                }
+    
+            }
+
+            newState = problem->moveRight(current); 
+            if (newState != nullptr) { // if right is a valid move
+
+                if (!problem->isExplored(newState, explored)) { // check if the state has not been explored
+                    frontier.push(newState); // add it to the frontier
+                }
+    
+            }
+
+            
         }
+
+    }
+    
+}
+
+        
+        */
+
  
  
         
