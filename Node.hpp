@@ -51,9 +51,20 @@ class Node{
         } 
 
         void swapTiles(int curr_row, int curr_col, int new_row, int new_col) {
-            int temp = this->puzzle.at(new_row).at(new_col); // save the value stored in the new position
-            this->puzzle.at(new_row).at(new_col) = 0; // store the blank in the new position
-            this->puzzle.at(curr_row).at(curr_col) = temp; // store the temp value in the curr position
+    // Check if both current and new positions are within the 3x3 grid bounds
+    if (curr_row >= 0 && curr_row < 3 && curr_col >= 0 && curr_col < 3 &&
+        new_row >= 0 && new_row < 3 && new_col >= 0 && new_col < 3) {
+        
+        // Perform the swap
+        int temp = this->puzzle.at(new_row).at(new_col); // Save the value in the new position
+        this->puzzle.at(new_row).at(new_col) = this->puzzle.at(curr_row).at(curr_col); // Move the blank tile
+        this->puzzle.at(curr_row).at(curr_col) = temp; // Place the temp value in the current position
+    } else {
+        // If out of bounds, print an error message for debugging
+        std::cout << "swapTiles attempted out-of-bounds access: (" 
+                  << curr_row << ", " << curr_col << ") <-> ("
+                  << new_row << ", " << new_col << ")\n";
+    }
         }
 
         vector< vector<int> > getPuzzle() {
