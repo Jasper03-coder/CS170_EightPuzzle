@@ -144,7 +144,7 @@ class Problem {
                 vector< vector<int> > goal = {{1,2,3}, {4,5,6}, {7,8,0}};
                 Node* goalState = new Node(goal, nullptr, 0);
 
-                return (node1->getCost() + node1->countMisplacedTiles(node1, goalState) > node2->getCost() + node2->countMisplacedTiles(node1, goalState));
+                return (node1->getCost() + node1->countMisplacedTiles(goalState) > node2->getCost() + node2->countMisplacedTiles(goalState));
             }
             
         };

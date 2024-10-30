@@ -97,11 +97,11 @@ class Node{
             return this->h;
         }
 
-        int countMisplacedTiles(Node* current, Node* goalState) {
+        int countMisplacedTiles(Node* goalState) {
             int count = 0;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) { 
-                    if (current->getPuzzle().at(i).at(j) != goalState->getPuzzle().at(i).at(j)) {
+                    if (puzzle.at(i).at(j) != goalState->getPuzzle().at(i).at(j) && puzzle.at(i).at(j) != 0) {
                         count++; 
                     }
                 }

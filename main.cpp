@@ -30,7 +30,7 @@ int main() {
 
     if (puzzleType == 1) { // Default puzzle ---------------
         
-        default_initial = {{1,2,3}, {4,8,0}, {7,6,5}};
+        default_initial = {{1,2,3}, {4,0,5}, {7,8,6}};
 
     }
     else if (puzzleType == 2) { // Custom puzzle ----------------
