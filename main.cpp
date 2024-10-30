@@ -1,6 +1,8 @@
 #include <iostream>
 #include<sstream>
 #include <vector>
+#include "Problem.hpp"
+#include "UniformCostSearch.hpp"
 
 using namespace std;
 
@@ -91,6 +93,14 @@ int main() {
 
     }
 
+    vector<vector<int>> goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+
+    Node* initialNode = new Node(initial, nullptr, 0); // Initial state node
+    Node* goalNode = new Node(goal, nullptr, 0);       // Goal state node
+
+        Problem problem(initialNode, goalNode);
+
+
     /*
     
         Add code if necessary 
@@ -126,9 +136,9 @@ int main() {
     int nodeDepth;
 
     // run the algorithms here
-    
-    if (algorithm == 1) { // Uniform Cost Search
 
+    if (algorithm == 1) { // Uniform Cost Search
+        uniformCostSearch(problem);
     }
     else if (algorithm == 2) { // Misplaced Tile 
 
@@ -142,6 +152,8 @@ int main() {
     // cout << "The maximum number of nodes in the queue at any one time: " << maxQueue << endl;
     // cout << "The depth of the goal was " << nodeDepth << endl;
    
+    delete initialNode;
+    delete goalNode;
 
     return 0;
 }
