@@ -139,87 +139,79 @@ class Problem {
 
  
 
-        struct EDCompareCosts {
-            bool operator() (Node* node1, Node* node2) {
-                
-                // for A* search return node1->f > node2->f where f = g + h
-                vector< vector<int> > goal = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
-                Node* goalState = new Node(goal, nullptr, 0);
-                return node1->getCost() + node1->findEuclideanDistance(goalState) > node2->getCost() + node2->findEuclideanDistance(goalState);
-            }
-        };
+       
         
-        int EuclideanDistanceSearch() {
-            priority_queue<Node*, vector<Node*>, EDCompareCosts> frontier;
-            vector<Node*> explored;
-            frontier.push(initialState);
+        // int EuclideanDistanceSearch() {
+        //     priority_queue<Node*, vector<Node*>, EDCompareCosts> frontier;
+        //     vector<Node*> explored;
+        //     frontier.push(initialState);
 
-            while(!frontier.empty()) {
+        //     while(!frontier.empty()) {
 
-                // check if the current size of the frontier is bigger than the maxQueueSize 
+        //         // check if the current size of the frontier is bigger than the maxQueueSize 
 
-                Node* current = frontier.top();
-                frontier.pop();
+        //         Node* current = frontier.top();
+        //         frontier.pop();
 
-                // print the node
+        //         // print the node
 
-                if (isGoalState(current)) {
-                    printSolution(current);
-                    return 0;
-                }
+        //         if (isGoalState(current)) {
+        //             printSolution(current);
+        //             return 0;
+        //         }
 
-                if (!isExplored(current, explored)) {
-                    explored.push_back(current);
+        //         if (!isExplored(current, explored)) {
+        //             explored.push_back(current);
 
-                    // use the operators to expand the nodes and if the new node is not explored, then add it to the frontier
+        //             // use the operators to expand the nodes and if the new node is not explored, then add it to the frontier
 
 
-                    Node* newState = Up(current); 
-                    if (newState != nullptr) { // if Up is a valid move
+        //             Node* newState = Up(current); 
+        //             if (newState != nullptr) { // if Up is a valid move
 
-                        if (!(isExplored(newState, explored)) ) { // if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
+        //                 if (!(isExplored(newState, explored)) ) { // if the state has not been explored
+        //                     frontier.push(newState); // add it to the frontier
+        //                 }
                         
             
-                    }
+        //             }
 
-                    newState = Down(current);
-                    if (newState != nullptr) { // if down is a valid move
+        //             newState = Down(current);
+        //             if (newState != nullptr) { // if down is a valid move
 
-                        if (!isExplored(newState, explored)) { // check if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
+        //                 if (!isExplored(newState, explored)) { // check if the state has not been explored
+        //                     frontier.push(newState); // add it to the frontier
+        //                 }
                         
-                    }
+        //             }
 
-                    newState = Left(current);
-                    if (newState != nullptr) { // if Left is a valid move
+        //             newState = Left(current);
+        //             if (newState != nullptr) { // if Left is a valid move
 
-                        if (!isExplored(newState, explored)) { // check if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
+        //                 if (!isExplored(newState, explored)) { // check if the state has not been explored
+        //                     frontier.push(newState); // add it to the frontier
+        //                 }
             
-                    }
+        //             }
 
-                    newState = Right(current); 
-                    if (newState != nullptr) { // if right is a valid move
+        //             newState = Right(current); 
+        //             if (newState != nullptr) { // if right is a valid move
 
-                        if (!isExplored(newState, explored)) { // check if the state has not been explored
-                            frontier.push(newState); // add it to the frontier
-                        }
+        //                 if (!isExplored(newState, explored)) { // check if the state has not been explored
+        //                     frontier.push(newState); // add it to the frontier
+        //                 }
             
-                    }
+        //             }
 
 
-                }
+        //         }
 
 
             
             
-            }
-            return -1;
-        }
+        //     }
+        //     return -1;
+        // }
 
 
 

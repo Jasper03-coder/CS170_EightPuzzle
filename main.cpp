@@ -4,6 +4,7 @@
 
 #include "Node.hpp"
 #include "Problem.hpp"
+#include "EuclideanDistanceSearch.hpp"
 
 using namespace std;
 
@@ -110,18 +111,18 @@ int main() {
         cin >> algorithm;
     }
 
-    Problem* puzzle = new Problem(initialState, goalState);
+    Problem* problem = new Problem(initialState, goalState);
 
     // run the algorithms here
     
     if (algorithm == 1) { // Uniform Cost Search
-        //puzzle->UniformCostSearch();
+        
     }
     else if (algorithm == 2) { // Misplaced Tile 
-        //puzzle->MisplacedTilesSearch();
+        
     }
     else if (algorithm == 3) { // Euclidean Distance
-        puzzle->EuclideanDistanceSearch();
+        euclideanDistanceSearch(problem);
     }
 
     
