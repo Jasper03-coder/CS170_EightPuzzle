@@ -41,7 +41,7 @@ void uniformCostSearch(Problem* problem) {
         }
         else {
             cout << endl;
-            cout << "The best state to expand with g(n) = " << current->getCost() and " and h(n) = " << current->getH() << endl;
+            cout << "The best state to expand with g(n) = " << current->getCost() " and h(n) = " << current->getH() << endl;
             current->printNode();
             cout << "   Expanding this node..." << endl;
             cout << endl;
