@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 
 #include "Node.hpp"
 
@@ -12,6 +13,9 @@ class Problem {
     private:
         Node* initialState;
         Node* goalState;
+        int maxQueueSize = 0;
+        int nodesExpanded = 0;
+        int depth = 0;
 
     public:
 
@@ -30,6 +34,7 @@ class Problem {
                 return newNode;
             }
             return nullptr;
+
         }
 
         Node* Down(Node* currNode) {
@@ -39,6 +44,7 @@ class Problem {
                 newNode->incrementRow(); // Adjust as per swap direction
                 return newNode;
             }
+          
             return nullptr;
 
         }
@@ -49,10 +55,12 @@ class Problem {
                 newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() - 1);
                 newNode->decrementCol();
                 return newNode;
+
             }
             return nullptr;
 
         }
+
 
         Node* moveRight(Node* currNode) {
             if (currNode->getCol() < 2) { // Check that moving right is within bounds

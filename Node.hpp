@@ -32,7 +32,6 @@ class Node{
             }
         }
 
-// It should be checking if (column != puzzle.size() - 1) to prevent printing a space after the last element in the row.
         void printNode() {
             for(int row = 0; row < puzzle.size(); row++){ 
                 for(int column = 0; column < puzzle.size(); column++){
@@ -96,6 +95,32 @@ class Node{
             return this->h;
         }
 
+        int findEuclideanDistance(Node* goalState) {
+            int distance = 0;
+            int size = puzzle.size();
+
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (puzzle.at(i).at(j) != 0) { // Do not include blank tile
+                        int goalX;
+                        int goalY;
+                        for (int k = 0; k < size; k++) {
+                            for (int l = 0; l < size; l++) {
+                                if (puzzle.at(i).at(j) == goalState->getPuzzle().at(k).at(l)) {
+                                    goalX = k;
+                                    goalY = l;
+                                    break;
+                                }
+                            }
+                        }
+                        distance += sqrt(pow(i- goalX, 2) + pow(j - goalY, 2));
+                    }
+                }
+            }
+            return distance;
+        }
+        
+
         int countMisplacedTiles(Node* goalState) {
             int count = 0;
             for (int i = 0; i < 3; i++) {
@@ -109,6 +134,7 @@ class Node{
             this->h = count;
             return count;
         }  
+
     };
 
 

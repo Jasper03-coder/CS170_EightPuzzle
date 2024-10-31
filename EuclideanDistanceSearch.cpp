@@ -1,28 +1,25 @@
 #include <iostream>
-#include <vector> 
+#include <vector>
 #include <queue>
 #include <set>
 
-#include "MisplacedTilesSearch.hpp"
 #include "Problem.hpp"
 #include "Node.hpp"
-
-// structure for the priority queue to handle Nodes by f = g + h
-
-struct MTCompareCosts {
+#include "EuclideanDistanceSearch.hpp"
+        
+struct EDCompareCosts {
     bool operator() (Node* node1, Node* node2) {
         
         vector< vector<int> > goal = {{1,2,3}, {4,5,6}, {7,8,0}};
         Node* goalState = new Node(goal, nullptr, 0);
-
-        return (node1->getCost() + node1->countMisplacedTiles(goalState)) > (node2->getCost() + node2->countMisplacedTiles(goalState));
+        return node1->getCost() + node1->findEuclideanDistance(goalState) > node2->getCost() + node2->findEuclideanDistance(goalState);
     }
     
 };
 
-void misplacedTilesSearch(Problem* problem) {
+void euclideanDistanceSearch(Problem* problem) {
     // Priority queue to select the node with the lowest cumulative cost
-    std::priority_queue<Node*, std::vector<Node*>, MTCompareCosts> pq;
+    std::priority_queue<Node*, std::vector<Node*>, EDCompareCost> pq;
     std::set<std::vector<std::vector<int>>> visited;
 
     // Start with the initial state of the problem
@@ -39,6 +36,7 @@ void misplacedTilesSearch(Problem* problem) {
         // Pop the node with the lowest cost
         Node* current = pq.top();
         pq.pop();
+
 
         // Goal check
         if (problem->isGoalState(current)) {

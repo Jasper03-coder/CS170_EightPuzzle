@@ -33,6 +33,21 @@ void uniformCostSearch(Problem* problem) {
         Node* current = pq.top();
         pq.pop();
 
+        if (current == problem->getInitialState()) {
+            cout << "Expanding state" << endl;
+            current->printNode();
+            nodesExpanded++;
+            cout << endl << endl;
+        }
+        else {
+            cout << endl;
+            cout << "The best state to expand with g(n) = " << current->getCost() << " and h(n) = " << current->getH() << endl;
+            current->printNode();
+            cout << "   Expanding this node..." << endl;
+            cout << endl;
+            nodesExpanded++;
+        }
+
         // Goal check
         if (problem->isGoalState(current)) {
             std::cout << "Goal reached with path cost: " << current->getCost() << std::endl;

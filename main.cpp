@@ -6,8 +6,7 @@
 #include "Problem.hpp"
 #include "UniformCostSearch.hpp"
 #include "MisplacedTilesSearch.hpp"
-// #include "EuclideanDistanceSearch.hpp"
-
+#include "EuclideanDistanceSearch.hpp"
 
 using namespace std;
 
@@ -36,6 +35,8 @@ int main() {
 
     }
     else if (puzzleType == 2) { // Custom puzzle ----------------
+
+        defaultPuzzle = false;
 
         cout << "Enter your puzzle, use a zero to represent the blank" << endl;
         cout << "Enter the first row, use space or tabs between numbers" << endl;
@@ -73,7 +74,6 @@ int main() {
         ss.clear();
         getline(cin, row);
         ss << row;
-        
         vector<int> row3;
         for (int i = 0; i < 3; i++) {
             ss >> value;
@@ -96,7 +96,6 @@ int main() {
     Node* goalState = new Node(goal, nullptr, 0);
   
     Problem* problem = new Problem(initialState, goalState);
-
 
     cout << "\nEnter your choice of algorithm" << endl;
     cout << "1 for Uniform Cost Search" << endl;
@@ -125,7 +124,8 @@ int main() {
         misplacedTilesSearch(problem);
     }
     else if (algorithm == 3) { // Euclidean Distance
-        //euclideanDistanceSearch(problem);
+        euclideanDistanceSearch(problem);
+
     }
   
   delete initialState;
