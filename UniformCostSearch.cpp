@@ -58,6 +58,21 @@ void uniformCostSearch(Problem* problem) {
             return;
         }
 
+        if (current == problem->getInitialState()) {
+            cout << "Expanding state" << endl;
+            current->printNode();
+            nodesExpanded++;
+            cout << endl << endl;
+        }
+        else {
+            cout << endl;
+            cout << "The best state to expand with g(n) = " << current->getCost() << " and h(n) = " << current->getH() << endl;
+            current->printNode();
+            cout << "   Expanding this node..." << endl;
+            cout << endl;
+            nodesExpanded++;
+        }
+
         // If state has already been visited, skip further expansion
         if (visited.find(current->getPuzzle()) != visited.end()) {
             continue;
