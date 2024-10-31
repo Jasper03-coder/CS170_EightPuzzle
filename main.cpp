@@ -13,7 +13,7 @@ using namespace std;
 
 int main() {
 
-    cout << "Welcome to 862288730, 862277791, and XXX 8 puzzle solver." << endl;
+    cout << "Welcome to 862288730, 862277791, and 862423366 8 puzzle solver." << endl;
 
     cout << "Type \"1\" to use a default puzzle, or \"2\" to enter your own puzzle." << endl;
     int puzzleType;

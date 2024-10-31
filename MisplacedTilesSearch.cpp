@@ -3,6 +3,7 @@
 
 #include "Problem.hpp"
 #include "Node.hpp"
+#include "MisplacedTilesSearch.hpp"
         
         
 struct MTCompareCosts {
