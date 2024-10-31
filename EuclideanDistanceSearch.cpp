@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <set>
 
 #include "Problem.hpp"
 #include "Node.hpp"
@@ -16,25 +17,36 @@ struct EDCompareCosts {
     
 };
 
-// Search algorithm to solve the 8 puzzle by A* Misplaced Tiles Search
-
 void euclideanDistanceSearch(Problem* problem) {
-    priority_queue<Node*, vector<Node*>, EDCompareCosts > frontier; // priority queue to select the node with the lowest cost
-    vector<Node*> explored;     // keep track of nodes we already explored
-    frontier.push(problem->getInitialState());        // initialize the frontier using the initialState
+    // Priority queue to select the node with the lowest cumulative cost
+    std::priority_queue<Node*, std::vector<Node*>, EDCompareCost> pq;
+    std::set<std::vector<std::vector<int>>> visited;
 
-    // Create and initialize variables since we removed it from the problems private variables
+    // Start with the initial state of the problem
+    Node* startNode = problem->getInitialState();
+    pq.push(new Node(startNode->getPuzzle(), nullptr, 0)); // Initialize with cost 0
+
     int nodesExpanded = 0;
     int maxQueueSize = 0;
 
-    while (!frontier.empty()) { // Check if the frontier is not empty
-        
-        if (frontier.size() > maxQueueSize) { // check if the size of the frontier is bigger than the maxQueue size
-            maxQueueSize = frontier.size(); // Update if it is
-        }
+    while (!pq.empty()) {
+        // Update maximum queue size for statistics
+        if (pq.size() > maxQueueSize) maxQueueSize = pq.size();
 
-        Node* current = frontier.top(); // Get a leaf node from the frontier
-        frontier.pop(); // Remove the leaf node from the frontier
+        // Pop the node with the lowest cost
+        Node* current = pq.top();
+        pq.pop();
+
+
+        // Goal check
+        if (problem->isGoalState(current)) {
+            std::cout << "Goal reached with path cost: " << current->getCost() << std::endl;
+            problem->printSolution(current);
+            std::cout << "Nodes expanded: " << nodesExpanded << std::endl;
+            std::cout << "Maximum queue size: " << maxQueueSize << std::endl;
+            std::cout << "Depth of goal node: " << current->getCost() << std::endl;
+            return;
+        }
 
         if (current == problem->getInitialState()) {
             cout << "Expanding state" << endl;
@@ -51,64 +63,26 @@ void euclideanDistanceSearch(Problem* problem) {
             nodesExpanded++;
         }
 
-        // Check if the current state is the goal state
-        
-        if (problem->isGoalState(current)) { // if it is the goal state, return the corresponding solution
-            problem->printSolution(current); 
-            cout << "Nodes expanded: " << nodesExpanded << endl;
-            cout << "Maximum queue size: " << maxQueueSize << endl;
-            cout << "Depth of goal node: " << current->getCost() << endl;
-            return;
+        // If state has already been visited, skip further expansion
+        if (visited.find(current->getPuzzle()) != visited.end()) {
+            continue;
         }
 
-        if (!problem->isExplored(current, explored)) { // check if the current state has been explored
-            explored.push_back(current); // add it to the explored set
+        // Mark the current state as visited
+        visited.insert(current->getPuzzle());
+        nodesExpanded++;
 
-            // Use the operators to expand the current state
-
-            Node* newState = problem->Up(current); 
-            if (newState != nullptr) { // if Up is a valid move
-
-                if (!problem->isExplored(newState, explored) ) { // if the state has not been explored
-                    frontier.push(newState); // add it to the frontier
-                }
-                
-    
+        // Expand the current node and add all valid children to the priority queue
+        std::vector<Node*> children = problem->expand(current);
+        for (Node* child : children) {
+            if (visited.find(child->getPuzzle()) == visited.end()) {
+                pq.push(new Node(child->getPuzzle(), current, current->getCost() + 1));
             }
-
-            newState = problem->Down(current);
-            if (newState != nullptr) { // if down is a valid move
-
-                if (!problem->isExplored(newState, explored)) { // check if the state has not been explored
-                    frontier.push(newState); // add it to the frontier
-                }
-                
-            }
-
-            newState = problem->moveLeft(current);
-            if (newState != nullptr) { // if Left is a valid move
-
-                if (!problem->isExplored(newState, explored)) { // check if the state has not been explored
-                    frontier.push(newState); // add it to the frontier
-                }
-    
-            }
-
-            newState = problem->moveRight(current); 
-            if (newState != nullptr) { // if right is a valid move
-
-                if (!problem->isExplored(newState, explored)) { // check if the state has not been explored
-                    frontier.push(newState); // add it to the frontier
-                }
-    
-            }
-
-            
         }
-
     }
-    
-}
 
-        
-    
+    // If we exit the loop, the goal was not reachable
+    std::cout << "Goal not reachable" << std::endl;
+    std::cout << "Nodes expanded: " << nodesExpanded << std::endl;
+    std::cout << "Maximum queue size: " << maxQueueSize << std::endl;
+}
