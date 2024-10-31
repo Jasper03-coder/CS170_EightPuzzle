@@ -38,16 +38,17 @@ void misplacedTilesSearch(Problem* problem) {
         frontier.pop(); // Remove the leaf node from the frontier
 
         if (current == problem->getInitialState()) {
-            // cout << "Expanding state" << endl;
-            // current->printNode();
+            cout << "Expanding state" << endl;
+            current->printNode();
             nodesExpanded++;
-            // cout << endl << endl;
+            cout << endl << endl;
         }
         else {
-            // cout << endl;
-            // current->printNode();
-            // cout << "   Expanding this node..." << endl;
-            // cout << endl;
+            cout << endl;
+            cout << "The best state to expand with g(n) = " << current->getCost() << " and h(n) = " << current->getH() << endl;
+            current->printNode();
+            cout << "   Expanding this node..." << endl;
+            cout << endl;
             nodesExpanded++;
         }
 
