@@ -27,61 +27,49 @@ class Problem {
        // Operators:
 
         Node* Up(Node* currNode) {
-            if (currNode->getRow() == 0) {
-                return nullptr;
+            if (currNode->getRow() > 0) { // Check that moving up is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() - 1, currNode->getCol());
+                newNode->decrementRow(); // Adjust as per swap direction
+                return newNode;
             }
+            return nullptr;
 
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving up means blank_row increments by 1 and blank_col remains the same
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() - 1, currNode->getCol());
-            newNode->decrementRow();
-
-            return newNode;
         }
 
         Node* Down(Node* currNode) {
-            if (currNode->getRow() == 2) {
-                return nullptr;
+            if (currNode->getRow() < 2) { // Check that moving down is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() + 1, currNode->getCol());
+                newNode->incrementRow(); // Adjust as per swap direction
+                return newNode;
             }
-
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving down means blank_row decrements by 1 and blank_col remains the same
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow() + 1, currNode->getCol());
-            newNode->incrementRow();
-
-            return newNode;
+          
+            return nullptr;
 
         }
 
-        Node* Left(Node* currNode) {
-            if (currNode->getCol() == 0) {
-                return nullptr;
+        Node* moveLeft(Node* currNode) {
+            if (currNode->getCol() > 0) { // Check that moving left is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() - 1);
+                newNode->decrementCol();
+                return newNode;
+
             }
-
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving left means blank_row remains and blank_col decrements by 1
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() - 1);
-            newNode->decrementCol();
-
-            return newNode;
+            return nullptr;
 
         }
 
-        Node* Right(Node* currNode) {
-            if (currNode->getCol() == 2) {
-                return nullptr;
+
+        Node* moveRight(Node* currNode) {
+            if (currNode->getCol() < 2) { // Check that moving right is within bounds
+                Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1);
+                newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() + 1);
+                newNode->incrementCol();
+                return newNode;
             }
-
-            Node* newNode = new Node(currNode->getPuzzle(), currNode, currNode->getCost() + 1); //  Create a new node with a copy of the current nodes puzzle
-
-            // moving left means blank_row remains and blank_col increments by 1
-            newNode->swapTiles(currNode->getRow(), currNode->getCol(), currNode->getRow(), currNode->getCol() + 1);
-            newNode->incrementCol();
-
-            return newNode;
+            return nullptr;
 
         }
 
@@ -123,99 +111,30 @@ class Problem {
 
             current->printNode();
             cout << endl << endl;
+            
         }
 
-        int getMaxQueue() {
-            return this->maxQueueSize;
+        vector<Node*> expand(Node* currNode) {
+            vector<Node*> children;
+
+            if (Node* up = Up(currNode)) children.push_back(up);
+            if (Node* down = Down(currNode)) children.push_back(down);
+            if (Node* left = moveLeft(currNode)) children.push_back(left);
+            if (Node* right = moveRight(currNode)) children.push_back(right);
+
+            return children; // Return all possible moves
         }
 
-        int getNodesExpanded() {
-            return this->nodesExpanded;
+        Node* getInitialState() {
+            return this->initialState;
         }
 
-        int getDepth() {
-            return this->depth;
+        Node* getGoalState() {
+            return this->goalState;
         }
+  
 
  
-
-       
-        
-        // int EuclideanDistanceSearch() {
-        //     priority_queue<Node*, vector<Node*>, EDCompareCosts> frontier;
-        //     vector<Node*> explored;
-        //     frontier.push(initialState);
-
-        //     while(!frontier.empty()) {
-
-        //         // check if the current size of the frontier is bigger than the maxQueueSize 
-
-        //         Node* current = frontier.top();
-        //         frontier.pop();
-
-        //         // print the node
-
-        //         if (isGoalState(current)) {
-        //             printSolution(current);
-        //             return 0;
-        //         }
-
-        //         if (!isExplored(current, explored)) {
-        //             explored.push_back(current);
-
-        //             // use the operators to expand the nodes and if the new node is not explored, then add it to the frontier
-
-
-        //             Node* newState = Up(current); 
-        //             if (newState != nullptr) { // if Up is a valid move
-
-        //                 if (!(isExplored(newState, explored)) ) { // if the state has not been explored
-        //                     frontier.push(newState); // add it to the frontier
-        //                 }
-                        
-            
-        //             }
-
-        //             newState = Down(current);
-        //             if (newState != nullptr) { // if down is a valid move
-
-        //                 if (!isExplored(newState, explored)) { // check if the state has not been explored
-        //                     frontier.push(newState); // add it to the frontier
-        //                 }
-                        
-        //             }
-
-        //             newState = Left(current);
-        //             if (newState != nullptr) { // if Left is a valid move
-
-        //                 if (!isExplored(newState, explored)) { // check if the state has not been explored
-        //                     frontier.push(newState); // add it to the frontier
-        //                 }
-            
-        //             }
-
-        //             newState = Right(current); 
-        //             if (newState != nullptr) { // if right is a valid move
-
-        //                 if (!isExplored(newState, explored)) { // check if the state has not been explored
-        //                     frontier.push(newState); // add it to the frontier
-        //                 }
-            
-        //             }
-
-
-        //         }
-
-
-            
-            
-        //     }
-        //     return -1;
-        // }
-
-
-
-        
  
         
 };

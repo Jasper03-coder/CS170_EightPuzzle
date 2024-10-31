@@ -52,6 +52,7 @@ class Node{
             int temp = this->puzzle.at(new_row).at(new_col); // save the value stored in the new position
             this->puzzle.at(new_row).at(new_col) = 0; // store the blank in the new position
             this->puzzle.at(curr_row).at(curr_col) = temp; // store the temp value in the curr position
+            
         }
 
         vector< vector<int> > getPuzzle() {
@@ -119,6 +120,21 @@ class Node{
             return distance;
         }
         
+
+        int countMisplacedTiles(Node* goalState) {
+            int count = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) { 
+                    if (puzzle.at(i).at(j) != goalState->getPuzzle().at(i).at(j)) {
+                        count++; 
+                    }
+                }
+            }
+
+            this->h = count;
+            return count;
+        }  
+
     };
 
 

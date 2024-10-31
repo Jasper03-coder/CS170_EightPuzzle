@@ -1,4 +1,4 @@
- 
+
  
  // Operators
         
@@ -39,3 +39,24 @@
             - since the move is valid and the blank tile moves. We need to update the row/column according to whichever operator move was made
 
             
+// Search algorithm 
+    - #include <queue>
+    - we can use priority_queue for the frontier: priority_queue<Node*, vector<Node*>, algorithmCompareCosts> frontier;
+    - we can keep track of which nodes we explored using a vector of node pointers 
+    - push the initial state to the frontier
+
+    - we can use a while loop with the condition of if the frontier is not empty
+
+    - if the frontier is not empty, get a leaf node from the frontier
+    - pop that leaf node from the frontier
+
+    - check if it is a goal state: 
+        - if it is, print the solution path and return 0
+
+        - if it is not the goal state
+
+    -  add it to the explored set if its yet explored
+
+    - use the operators to expand the current state
+    - if the move is valid, create a new node and only add it to the frontier if you have not explored it yet
+ 

@@ -4,13 +4,15 @@
 
 #include "Node.hpp"
 #include "Problem.hpp"
+#include "UniformCostSearch.hpp"
+#include "MisplacedTilesSearch.hpp"
 #include "EuclideanDistanceSearch.hpp"
 
 using namespace std;
 
 int main() {
 
-    cout << "Welcome to 862288730, 862277791, and XXX 8 puzzle solver." << endl;
+    cout << "Welcome to 862288730, 862277791, and 862423366 8 puzzle solver." << endl;
 
     cout << "Type \"1\" to use a default puzzle, or \"2\" to enter your own puzzle." << endl;
     int puzzleType;
@@ -21,9 +23,7 @@ int main() {
         cout << "Type \"1\" to use a default puzzle, or \"2\" to enter your own puzzle." << endl;
         cin >> puzzleType;
     }
-    
-    vector< vector<int> > goal ={{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
-    Node* goalState = new Node(goal, nullptr, 0);
+
     vector< vector<int> > default_initial; 
     vector< vector<int> > custom_initial;
 
@@ -31,7 +31,7 @@ int main() {
 
     if (puzzleType == 1) { // Default puzzle ---------------
         
-        default_initial = {{1, 2, 3}, {4, 8, 0}, {7, 6, 5}};
+        default_initial = {{1,0,3}, {4,2,6}, {7,5,8}};
 
     }
     else if (puzzleType == 2) { // Custom puzzle ----------------
@@ -81,17 +81,21 @@ int main() {
         }
         custom_initial.push_back(row3);
 
+        defaultPuzzle = false;
     }
 
-
     Node* initialState = nullptr;
-
     if (defaultPuzzle) {
         initialState = new Node(default_initial, nullptr, 0);
     }
     else {
         initialState = new Node(custom_initial, nullptr, 0);
     }
+  
+    vector< vector<int> > goal = {{1,2,3},{4,5,6},{7,8,0}};
+    Node* goalState = new Node(goal, nullptr, 0);
+  
+    Problem* problem = new Problem(initialState, goalState);
 
     cout << "\nEnter your choice of algorithm" << endl;
     cout << "1 for Uniform Cost Search" << endl;
@@ -111,24 +115,22 @@ int main() {
         cin >> algorithm;
     }
 
-    Problem* problem = new Problem(initialState, goalState);
-
     // run the algorithms here
     
     if (algorithm == 1) { // Uniform Cost Search
-        
+        uniformCostSearch(problem);
     }
     else if (algorithm == 2) { // Misplaced Tile 
-        
+        misplacedTilesSearch(problem);
     }
     else if (algorithm == 3) { // Euclidean Distance
         euclideanDistanceSearch(problem);
-    }
 
-    
-    // cout << "To solve this problem the search algorithm expanded a total of " << nodesExpanded << " nodes." << endl;
-    // cout << "The maximum number of nodes in the queue at any one time: " << maxQueue << endl;
-    // cout << "The depth of the goal was " << nodeDepth << endl;
+    }
+  
+  delete initialState;
+  delete goalState;
+  delete problem;
    
 
     return 0;
