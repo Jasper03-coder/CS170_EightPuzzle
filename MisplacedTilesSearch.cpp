@@ -37,6 +37,16 @@ void misplacedTilesSearch(Problem* problem) {
         Node* current = frontier.top(); // Get a leaf node from the frontier
         frontier.pop(); // Remove the leaf node from the frontier
 
+        // Check if the current state is the goal state
+        
+        if (problem->isGoalState(current)) { // if it is the goal state, return the corresponding solution
+            problem->printSolution(current); 
+            cout << "Nodes expanded: " << nodesExpanded << endl;
+            cout << "Maximum queue size: " << maxQueueSize << endl;
+            cout << "Depth of goal node: " << current->getCost() << endl;
+            return;
+        }
+
         if (current == problem->getInitialState()) {
             cout << "Expanding state" << endl;
             current->printNode();
@@ -50,16 +60,6 @@ void misplacedTilesSearch(Problem* problem) {
             cout << "   Expanding this node..." << endl;
             cout << endl;
             nodesExpanded++;
-        }
-
-        // Check if the current state is the goal state
-        
-        if (problem->isGoalState(current)) { // if it is the goal state, return the corresponding solution
-            problem->printSolution(current); 
-            cout << "Nodes expanded: " << nodesExpanded << endl;
-            cout << "Maximum queue size: " << maxQueueSize << endl;
-            cout << "Depth of goal node: " << current->getCost() << endl;
-            return;
         }
 
         if (!problem->isExplored(current, explored)) { // check if the current state has been explored
