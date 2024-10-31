@@ -33,6 +33,16 @@ void uniformCostSearch(Problem* problem) {
         Node* current = pq.top();
         pq.pop();
 
+        // Goal check
+        if (problem->isGoalState(current)) {
+            std::cout << "Goal reached with path cost: " << current->getCost() << std::endl;
+            problem->printSolution(current);
+            std::cout << "Nodes expanded: " << nodesExpanded << std::endl;
+            std::cout << "Maximum queue size: " << maxQueueSize << std::endl;
+            std::cout << "Depth of goal node: " << current->getCost() << std::endl;
+            return;
+        }
+
         if (current == problem->getInitialState()) {
             cout << "Expanding state" << endl;
             current->printNode();
@@ -46,16 +56,6 @@ void uniformCostSearch(Problem* problem) {
             cout << "   Expanding this node..." << endl;
             cout << endl;
             nodesExpanded++;
-        }
-
-        // Goal check
-        if (problem->isGoalState(current)) {
-            std::cout << "Goal reached with path cost: " << current->getCost() << std::endl;
-            problem->printSolution(current);
-            std::cout << "Nodes expanded: " << nodesExpanded << std::endl;
-            std::cout << "Maximum queue size: " << maxQueueSize << std::endl;
-            std::cout << "Depth of goal node: " << current->getCost() << std::endl;
-            return;
         }
 
         // If state has already been visited, skip further expansion
