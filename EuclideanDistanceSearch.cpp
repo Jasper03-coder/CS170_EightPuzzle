@@ -19,7 +19,7 @@ struct EDCompareCosts {
 
 void euclideanDistanceSearch(Problem* problem) {
     // Priority queue to select the node with the lowest cumulative cost
-    std::priority_queue<Node*, std::vector<Node*>, EDCompareCost> pq;
+    std::priority_queue<Node*, std::vector<Node*>, EDCompareCosts> pq;
     std::set<std::vector<std::vector<int>>> visited;
 
     // Start with the initial state of the problem
