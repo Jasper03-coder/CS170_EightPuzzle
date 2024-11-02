@@ -43,7 +43,7 @@ void uniformCostSearch(Problem* problem) {
             return;
         }
 
-        if (pq.size() != 0) {
+        if (pq.size() == 0) {
             cout << "Expanding state" << endl;
             current->printNode();
             nodesExpanded++;
