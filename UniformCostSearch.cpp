@@ -65,7 +65,7 @@ void uniformCostSearch(Problem* problem) {
 
         // Mark the current state as visited
         visited.insert(current->getPuzzle());
-        nodesExpanded++;
+        
 
         // Expand the current node and add all valid children to the priority queue
         std::vector<Node*> children = problem->expand(current);
