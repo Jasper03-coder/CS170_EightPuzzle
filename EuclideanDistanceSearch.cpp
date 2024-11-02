@@ -48,7 +48,7 @@ void euclideanDistanceSearch(Problem* problem) {
             return;
         }
 
-        if (current == problem->getInitialState()) {
+        if (pq.size() != 0) {
             cout << "Expanding state" << endl;
             current->printNode();
             nodesExpanded++;
