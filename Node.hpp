@@ -117,6 +117,7 @@ class Node{
                     }
                 }
             }
+            this->h = distance;
             return distance;
         }
         
